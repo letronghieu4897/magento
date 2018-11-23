@@ -1,4 +1,4 @@
-![alt text](https://www.brandinglosangeles.com/wp-content/uploads/MAGENTO-ICON.png) 
+![alt text](https://image.flaticon.com/icons/svg/818/818080.svg) 
 # Front-end 
 ## 
 # Back-end
