@@ -1,4 +1,8 @@
 ![alt text](https://image.flaticon.com/icons/svg/818/818080.svg) 
+
+# System 
+* set dev mode : **bin/magento deploy:mode:set developer**
+
 # Front-end 
 ## 
 # Back-end
