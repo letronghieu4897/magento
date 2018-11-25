@@ -25,6 +25,17 @@ $ php bin/magento cache:disable CACHE_TYPE
 $ php bin/magento cache:enable CACHE_TYPE
 
 ``` 
+
+* Indexer : 
+```sh
+
+$ php bin/magento indexer:info
+
+$ php bin/magento indexer:status [indexer]
+
+$ php bin/magento indexer:reindex [indexer]
+
+``` 
 # Front-end 
 ## 
 # Back-end
