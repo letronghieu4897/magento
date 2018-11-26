@@ -1,8 +1,8 @@
 ![alt text](https://image.flaticon.com/icons/svg/818/818080.svg) 
-# Linux Server
-* Change user : **chown -R [username].[groupname] /[path]** : chown -R hieunetpower.hieunetpower /var/www/
-# System 
-* Set mode : 
+# I. Linux Server
+* **1**. Change user : **chown -R [username].[groupname] /[path]** : chown -R hieunetpower.hieunetpower /var/www/
+# II.System 
+* **1**. Set mode : 
 ```sh
 
 $ php bin/magento deploy:mode:show
@@ -13,7 +13,7 @@ $ php bin/magento deploy:mode:set production
 
 ``` 
 
-* Clear cache :
+* **2**. Clear cache :
 ```sh
 
 $ php bin/magento cache:status
@@ -28,7 +28,7 @@ $ php bin/magento cache:enable CACHE_TYPE
 
 ``` 
 
-* Indexer : 
+* **3**. Indexer : 
 ```sh
 
 $ php bin/magento indexer:info
@@ -38,8 +38,8 @@ $ php bin/magento indexer:status [indexer]
 $ php bin/magento indexer:reindex [indexer]
 
 ``` 
-# Admin site 
-* Create new Menu : **app/code/[Vendor]/[Extention]/etc/adminhtml/menu.xml**
+# III.Admin site 
+* **1**. Create new Menu : **app/code/[Vendor]/[Extention]/etc/adminhtml/menu.xml**
 ```xml
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
@@ -55,9 +55,9 @@ $ php bin/magento indexer:reindex [indexer]
     </menu>
 </config>
 ```
-* Finding Parent : **../vendor/magento/module-sales/etc/adminhtml/menu.xml**
+* **1.1** Finding Parent : **../vendor/magento/module-sales/etc/adminhtml/menu.xml**
 
-* Support for finding parent
+* **1.2** Support for finding parent
 ```javascript
 [1] System  (Magento_Backend::system)
 [2] Dashboard   (Magento_Backend::dashboard)
@@ -82,9 +82,207 @@ Select Parent Menu:
 [5] Extensions  (Magento_Integration::system_extensions)
 [6] Permissions (Magento_User::system_acl)
 ```
-# Front-end 
+
+* **2**. Create Grid on Admin 
+```bash
+$ TREE
+. _______________________________________________________________________
+├── etc
+│     └── di.xml	
+├── view
+│     └── adminhtml
+|	   └── layout 
+|		└── ghn_ghn_index.xml
+├── Controller
+|     └── Adminhtml
+|	   └── Ghn
+|		└── Index.php
+├── Block
+│     └── Adminhtml
+│   	   └── Order.php
+│   
+├── Model
+|     ├── GhnOrder.php
+|     └── ResourceModel
+|		├── GhnOrder.php
+|		└── GhnOrder 
+|			└── Collection.php
+|
+. ________________________________________________________________________
+```
+- - **2.1** Declared on di.xml : **\app\code\[Vendor]\[Extention]\etc\di.xml**
+```xml
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="netpower_ghn_post_listing_data_source" xsi:type="string">Netpower\Ghn\Model\ResourceModel\GhnOrder\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Netpower\Ghn\Model\ResourceModel\Post\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">netpower_ghn_ghn</argument>
+            <argument name="resourceModel" xsi:type="string">Netpower\Ghn\Model\ResourceModel\GhnOrder</argument>
+        </arguments>
+    </virtualType>
+</config>
+```
+- - **2.2** Create layout Grid :  **\app\code\[Vendor]\[Extention]\view\adminhtml\layout\ghn_ghn_index.xml**
+```xml 
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Netpower\Ghn\Block\Adminhtml\Order" name="ghn_grid">
+                <block class="Magento\Backend\Block\Widget\Grid" name="ghn_grid.grid" as="grid">
+                    <arguments>
+                        <argument name="id" xsi:type="string">ghn_order_id</argument>
+                         <argument name="dataSource" xsi:type="object">Netpower\Ghn\Model\ResourceModel\GhnOrder\Collection</argument>
+                        <argument name="default_sort" xsi:type="string">id</argument>
+                        <argument name="default_dir" xsi:type="string">ASC</argument>
+                        <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="ghn_grid.grid.columnSet" as="grid.columnSet">
+                        <arguments>
+                            <argument name="rowUrl" xsi:type="array">
+                                <item name="path" xsi:type="string">*/*/edit</item>
+                            </argument>
+                        </arguments>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="ghn_order_id">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">ID GHN</argument>
+                                <argument name="index" xsi:type="string">ghn_order_id</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="column_css_class" xsi:type="string">col-id</argument>
+                                <argument name="header_css_class" xsi:type="string">col-id</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="status">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Status</argument>
+                                <argument name="index" xsi:type="string">status</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="column_css_class" xsi:type="string">col-id</argument>
+                                <argument name="header_css_class" xsi:type="string">col-id</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="shipping_address">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Shipping Address</argument>
+                                <argument name="index" xsi:type="string">shipping_address</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="column_css_class" xsi:type="string">col-id</argument>
+                                <argument name="header_css_class" xsi:type="string">col-id</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="service_name">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Service Name</argument>
+                                <argument name="index" xsi:type="string">service_name</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="column_css_class" xsi:type="string">col-id</argument>
+                                <argument name="header_css_class" xsi:type="string">col-id</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="service_cost">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Service Cost</argument>
+                                <argument name="index" xsi:type="string">service_cost</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="column_css_class" xsi:type="string">col-id</argument>
+                                <argument name="header_css_class" xsi:type="string">col-id</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="order_code">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Order Code</argument>
+                                <argument name="index" xsi:type="string">order_code</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="column_css_class" xsi:type="string">col-id</argument>
+                                <argument name="header_css_class" xsi:type="string">col-id</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="shipping_order_id">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Shipping Order ID</argument>
+                                <argument name="index" xsi:type="string">shipping_order_id</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="column_css_class" xsi:type="string">col-id</argument>
+                                <argument name="header_css_class" xsi:type="string">col-id</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="order_id">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Order ID</argument>
+                                <argument name="index" xsi:type="string">order_id</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="column_css_class" xsi:type="string">col-id</argument>
+                                <argument name="header_css_class" xsi:type="string">col-id</argument>
+                            </arguments>
+                        </block>
+                    </block>
+                </block>
+            </block>
+        </referenceContainer>
+    </body>
+</page>
+```
+- - **2.3** Create Controller to get action show Layout : **\app\code\[Vendor]\[Extention]\Controller\Adminhtml\Ghn\Index.php**
+```php
+<?php
+
+namespace Netpower\Ghn\Controller\Adminhtml\Ghn;
+
+class Index extends \Magento\Backend\App\Action
+{
+    protected $resultPageFactory = false;
+
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+    )
+    {
+        parent::__construct($context);
+        $this->resultPageFactory = $resultPageFactory;
+    }
+
+    public function execute()
+    {   
+
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getConfig()->getTitle()->prepend((__('GHN Order')));
+
+        return $resultPage;
+
+    }
+
+}
+```
+- - **2.4** Create Block for admin Grid : \app\code\[Vendor]\[Extention]\Block\Adminhtml\Order.php
+```php
+<?php
+namespace Netpower\Ghn\Block\Adminhtml;
+
+class Order extends \Magento\Backend\Block\Widget\Grid\Container
+{
+	protected function _construct()
+	{
+		$this->_controller = 'adminhtml_order';
+		$this->_blockGroup = 'Netpower_Ghn';
+		$this->_headerText = __('GHN Order');
+		$this->_addButtonLabel = __('Create New Order');
+		parent::_construct();
+	}
+}
+```
+- - **2.5** Create Collection (Important) to Grid convert data : \app\code\[Vendor]\[Extention]\Model\GhnOrder.php [**3**]
+
+* **3** Create Collection : 
+# IV.Front-end 
 ## 
-# Back-end
+# V.Back-end
 ## Install Database or Schema
 * Create folder Setup : app/code/[Vendor]/[Extention]/Setup 
 * Insert Data into Database 
