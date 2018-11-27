@@ -1,4 +1,11 @@
-![alt text](https://image.flaticon.com/icons/svg/818/818080.svg) 
+![Mọi](https://image.flaticon.com/icons/svg/818/818080.svg) 
+![Beginner](https://img.shields.io/badge/Magento-Beginner-brightgreen.svg)
+![Server](https://img.shields.io/badge/Magento-CetOS-red.svg)
+![System](https://img.shields.io/badge/Magento-System-green.svg)
+![Admin Site](https://img.shields.io/badge/Magento-Admin-yellow.svg)
+![Front-end](https://img.shields.io/badge/Magento-Frontend-orange.svg)
+![Back-end](https://img.shields.io/badge/Magento-Backend-ff69b4.svg)
+
 # I. Linux Server
 * **1**. Change user : **chown -R [username].[groupname] /[path]** : chown -R hieunetpower.hieunetpower /var/www/
 # II.System 
