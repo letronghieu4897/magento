@@ -19,7 +19,6 @@
 
 - **1**. Create new menu
 - **2**. Create Grid on admin
-- **3**. Create Collection
 
 **IV. Front-end**
 - **1**. 
@@ -27,6 +26,7 @@
 **V. Back-end**
 - **1**. Install Database or Schema
 - **2**. Cron Job 
+- **3**. Create Collection
 
 # I. Linux Server
 ## **1**. Change user 
@@ -314,9 +314,10 @@ class Order extends \Magento\Backend\Block\Widget\Grid\Container
 }
 ```
 ### **2.5** Create Collection (Important) to Grid convert data 
-* **\app\code\[Vendor]\[Extention]\Model\GhnOrder.php [**3**]**
+* **\app\code\[Vendor]\[Extention]\Model\GhnOrder.php [**V [3]**]**
 
-## **3** Create Collection : 
+
+
 # IV.Front-end 
 ## 
 # V.Back-end
@@ -457,4 +458,74 @@ $ crontab -e
 $ php bin/magento cron:run --group="default"
 
 //"default" is group declared in crontab.xml
+```
+
+## **3** Create Collection : 
+```bash
+$ COLLECTION
+. _______________________________________________________________________
+├── Model
+|     ├── GhnOrder.php 				[1]
+|     └── ResourceModel				
+|		├── GhnOrder.php		[2]
+|		└── GhnOrder 
+|			└── Collection.php 	[3]
+|
+. ________________________________________________________________________
+```
+* **[1] \app\code\[Vendor]\[Extention]\Model\GhnOrder.php**
+```php
+<?php
+namespace [Vendor]\[Extention]\Model;
+
+use Magento\Framework\Model\AbstractModel;
+	
+	/**
+	 * Collection to get data from directory_country_region
+	 */
+    class GhnOrder extends AbstractModel
+    {   
+        protected function _construct()
+        {
+            $this->_init('[Vendor]\[Extention]\Model\ResourceModel\GhnOrder');
+        }
+    }
+```
+
+* **[2] \app\code\[Vendor]\[Extention]\Model\ResourceModel\GhnOrder.php**
+```php
+<?php
+namespace [Vendor]\[Extention]\Model\ResourceModel;
+class GhnOrder extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+{
+    /**
+     * Define main table
+     */
+    protected function _construct()
+    {
+        $this->_init('sale_ghn_order', 'entity_id');   
+	//here "sale_ghn_order" is table name and "entity_id" is the key
+    }
+}
+```
+
+* **[3] \app\code\[Vendor]\[Extention]\Model\ResourceModel\GhnOrder\Collection.php**
+```php
+<?php
+
+/**
+* Ecommerce Resource Collection
+*/
+namespace [Vendor]\[Extention]\Model\ResourceModel\GhnOrder;
+
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection{
+/**
+* Resource initialization
+*
+* @return void
+*/
+protected function _construct(){
+	$this->_init('[Vendor]\[Extention]\Model\GhnOrder', '[Vendor]\[Extention]\Model\ResourceModel\GhnOrder');
+	}
+}
 ```
