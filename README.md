@@ -28,9 +28,10 @@
 - **1**. 
 
 # I. Linux Server
-* **1**. Change user : **chown -R [username].[groupname] /[path]** : chown -R hieunetpower.hieunetpower /var/www/
+## **1**. Change user 
+* **chown -R [username].[groupname] /[path]** : chown -R hieunetpower.hieunetpower /var/www/
 # II.System 
-* **1**. Set mode : 
+## **1**. Set mode : 
 ```sh
 
 $ php bin/magento deploy:mode:show
@@ -41,7 +42,7 @@ $ php bin/magento deploy:mode:set production
 
 ``` 
 
-* **2**. Clear cache :
+## **2**. Clear cache :
 ```sh
 
 $ php bin/magento cache:status
@@ -56,7 +57,7 @@ $ php bin/magento cache:enable CACHE_TYPE
 
 ``` 
 
-* **3**. Indexer : 
+## **3**. Indexer : 
 ```sh
 
 $ php bin/magento indexer:info
@@ -67,7 +68,8 @@ $ php bin/magento indexer:reindex [indexer]
 
 ``` 
 # III.Admin site 
-* **1**. Create new Menu : **app/code/[Vendor]/[Extention]/etc/adminhtml/menu.xml**
+## **1**. Create new Menu 
+* **app/code/[Vendor]/[Extention]/etc/adminhtml/menu.xml**
 ```xml
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
@@ -83,9 +85,10 @@ $ php bin/magento indexer:reindex [indexer]
     </menu>
 </config>
 ```
-* **1.1** Finding Parent : **../vendor/magento/module-sales/etc/adminhtml/menu.xml**
+### **1.1** Finding Parent 
+* **../vendor/magento/module-sales/etc/adminhtml/menu.xml**
 
-* **1.2** Support for finding parent
+### **1.2** Support for finding parent
 ```javascript
 [1] System  (Magento_Backend::system)
 [2] Dashboard   (Magento_Backend::dashboard)
@@ -111,7 +114,7 @@ Select Parent Menu:
 [6] Permissions (Magento_User::system_acl)
 ```
 
-* **2**. Create Grid on Admin 
+## **2**. Create Grid on Admin 
 ```bash
 $ TREE
 . _______________________________________________________________________
@@ -138,7 +141,8 @@ $ TREE
 |
 . ________________________________________________________________________
 ```
-- - **2.1** Declared on di.xml : **\app\code\[Vendor]\[Extention]\etc\di.xml**
+### **2.1** Declared on di.xml 
+* **\app\code\[Vendor]\[Extention]\etc\di.xml**
 ```xml
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
@@ -156,7 +160,8 @@ $ TREE
     </virtualType>
 </config>
 ```
-- - **2.2** Create layout Grid :  **\app\code\[Vendor]\[Extention]\view\adminhtml\layout\ghn_ghn_index.xml**
+### **2.2** Create layout Grid 
+* **\app\code\[Vendor]\[Extention]\view\adminhtml\layout\ghn_ghn_index.xml**
 ```xml 
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
@@ -257,7 +262,8 @@ $ TREE
     </body>
 </page>
 ```
-- - **2.3** Create Controller to get action show Layout : **\app\code\[Vendor]\[Extention]\Controller\Adminhtml\Ghn\Index.php**
+### **2.3** Create Controller to get action show Layout 
+* **\app\code\[Vendor]\[Extention]\Controller\Adminhtml\Ghn\Index.php**
 ```php
 <?php
 
@@ -288,7 +294,8 @@ class Index extends \Magento\Backend\App\Action
 
 }
 ```
-- - **2.4** Create Block for admin Grid : \app\code\[Vendor]\[Extention]\Block\Adminhtml\Order.php
+### **2.4** Create Block for admin Grid 
+* **\app\code\[Vendor]\[Extention]\Block\Adminhtml\Order.php**
 ```php
 <?php
 namespace Netpower\Ghn\Block\Adminhtml;
@@ -305,13 +312,14 @@ class Order extends \Magento\Backend\Block\Widget\Grid\Container
 	}
 }
 ```
-- - **2.5** Create Collection (Important) to Grid convert data : \app\code\[Vendor]\[Extention]\Model\GhnOrder.php [**3**]
+### **2.5** Create Collection (Important) to Grid convert data 
+* **\app\code\[Vendor]\[Extention]\Model\GhnOrder.php [**3**]**
 
-* **3** Create Collection : 
+## **3** Create Collection : 
 # IV.Front-end 
 ## 
 # V.Back-end
-## Install Database or Schema
+## 1.Install Database or Schema
 * Create folder Setup : app/code/[Vendor]/[Extention]/Setup 
 * Insert Data into Database 
   * Create file : **InstallData.php**
