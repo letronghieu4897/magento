@@ -385,4 +385,5 @@ class InstallSchema implements InstallSchemaInterface
 	}
 }
 ```
-* 
+* * Go into Database. Search **setup_module** then DROP it. 
+* * Go to Server : **php bin/magento setup:upgrade**
