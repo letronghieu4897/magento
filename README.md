@@ -6,6 +6,27 @@
 ![Front-end](https://img.shields.io/badge/Magento-Frontend-brightgreen.svg)
 ![Back-end](https://img.shields.io/badge/Magento-Backend-red.svg)
 
+# TABLE CONTENTs
+**I. Linux Server** 
+ - **1**. Change user
+ 
+**II. System**
+- **1**. Set mode
+- **2**. Clear cache
+- **3**. Indexer
+
+**III. Admin Site**
+
+- **1**. Create new menu
+- **2**. Create Grid on admin
+- **3**. Create Collection
+
+**IV. Front-end**
+- **1**. 
+
+**V. Back-end**
+- **1**. 
+
 # I. Linux Server
 * **1**. Change user : **chown -R [username].[groupname] /[path]** : chown -R hieunetpower.hieunetpower /var/www/
 # II.System 
