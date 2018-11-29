@@ -451,3 +451,10 @@ $ crontab -e
 #~ MAGENTO END:
 
 ```
+
+### **2.4** Run Crontab
+```bash
+$ php bin/magento cron:run --group="default"
+
+//"default" is group declared in crontab.xml
+```
