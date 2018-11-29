@@ -25,7 +25,8 @@
 - **1**. 
 
 **V. Back-end**
-- **1**. 
+- **1**. Install Database or Schema
+- **2**. Cron Job 
 
 # I. Linux Server
 ## **1**. Change user 
@@ -320,8 +321,10 @@ class Order extends \Magento\Backend\Block\Widget\Grid\Container
 ## 
 # V.Back-end
 ## 1.Install Database or Schema
-* Create folder Setup : app/code/[Vendor]/[Extention]/Setup 
-* Insert Data into Database 
+### **1.1** Create folder Setup 
+* **app/code/[Vendor]/[Extention]/Setup**
+
+### **1.2** Insert Data into Database 
   * Create file : **InstallData.php**
   * Create Schema or Insert New Column : **InstallSchema.php**
 ```php
@@ -393,5 +396,58 @@ class InstallSchema implements InstallSchemaInterface
 	}
 }
 ```
-* * Go into Database. Search **setup_module** then DROP it. 
-* * Go to Server : **php bin/magento setup:upgrade**
+* Go into Database. Search **setup_module** then DROP it. 
+* Go to Server : **php bin/magento setup:upgrade**
+
+## 2.Cron Job 
+```bash
+$ CRON JOB
+. _______________________________________________________________________
+├── etc
+│     └── crontab.xml	
+├── Cron
+│     └── FileName.php
+. ________________________________________________________________________
+```
+### **2.1** Create \app\code\[Vendor]\[Extention]\etc\crontab.xml
+```xml
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+	<group id="default">
+		<job instance="[Vendor]\[Extention]\Cron\FileName" method="execute" name="netpower_ghn_cron">
+			<schedule>* * * * *</schedule>
+		</job>
+	</group>
+</config>
+```
+
+### **2.2** Create file Cron : \app\code\[Vendor]\[Extention]\Cron\FileName.php
+```php
+<?php
+namespace [Vendor]\[Extention]\Cron;
+
+class Test 
+{
+   public function __construct() 
+    {}
+ 
+   public function execute()
+   {
+      //CODE HERE
+   }
+}
+```
+
+### **2.3** Create connect Cron on server : 
+```bash
+$ crontab -e
+```
+
+```txt
+#~ MAGENTO START
+* * * * * /usr/bin/php /var/www/html/[Source Magento]/bin/magento cron:run | grep -v Ran jobs by schedule >> /var/www/html/[Source Magento]/var/log/magento.cron.log
+* * * * * /usr/bin/php /var/www/html/[Source Magento]/update/cron.php >> /var/www/html/[Source Magento]/var/log/update.cron.log
+* * * * * /usr/bin/php /var/www/html/[Source Magento]/bin/magento setup:cron:run >> /var/www/html/[Source Magento]/var/log/setup.cron.log
+#~ MAGENTO END:
+
+```
