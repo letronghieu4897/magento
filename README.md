@@ -19,7 +19,7 @@
 
 - **1**. Create new menu
 - **2**. Create Grid on admin
-- **3**. Create new field
+- **3**. Create new field 
 - - **3.1**. Front-end : Show field
 - - **3.2**. Back-end : source data for field
 
@@ -32,6 +32,8 @@
 - **3**. Collection
 - - **3.1**. Create Collection
 - - **3.2**. Using Factory
+- **4**. Get Data 
+- - **4.1**. From Admin Field
 
 # I. Linux Server
 ## **1**. Change user 
@@ -797,5 +799,68 @@ $loadData = $this->_ghnOrder->create()->load(['id_of_table']);
 
 $loadData->setData([name_of_column], $data);
 $loadData->save()
+
+```
+## **4**. Get Data 
+### **4.1**. From Admin Field
+```php
+<?php
+namespace Netpower\Ghn\Model;
+
+use \Magento\Store\Model\ScopeInterface;
+
+class Carrier extends AbstractCarrier implements CarrierInterface
+{
+/**
+ * @var string
+ */
+
+/**
+ * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+ * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
+ * @param \Psr\Log\LoggerInterface $logger
+ * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
+ * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
+ * @param \Netpower\Ghn\Controller\Getdata\Getdata $fee
+ * @param array $data
+ */
+public function __construct(
+    ScopeConfigInterface $scopeConfig, 
+    array $data = []
+)
+{
+    parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
+}
+
+/**
+ * @return array
+ */
+public function getAllowedMethods()
+{
+    /*0*/
+    return ['giaohangnhanh' => $this->getConfigData('name') ];
+}
+
+/**
+ * Processing additional validation to check is carrier applicable.
+ *
+ * @param \Magento\Framework\DataObject $request
+ * @return $this|bool|\Magento\Framework\DataObject
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ */
+public function processAdditionalValidation(DataObject $request)
+{
+    /*1*/
+    return $this;
+}
+
+/**
+ * @param RateRequest $request
+ * @return bool|Result
+ */
+public function collectRates(RateRequest $request)
+{
+    $adminField = $this->_scopeConfig->getValue('[id of section]/[id of group]/[id of field]', ScopeInterface::SCOPE_STORE);
+}
 
 ```
