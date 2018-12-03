@@ -140,16 +140,16 @@ $ TREE
 |     └── Adminhtml
 |	   └── Ghn
 |		└── Index.php
-├── Block
+├── Block					
 │     └── Adminhtml
 │   	   └── Order.php
 │   
-├── Model
+├── Model					
 |     ├── GhnOrder.php
 |     └── ResourceModel
 |		├── GhnOrder.php
 |		└── GhnOrder 
-|			└── Collection.php
+|			└── Collection.php	
 |
 . ________________________________________________________________________
 ```
@@ -330,14 +330,14 @@ class Order extends \Magento\Backend\Block\Widget\Grid\Container
 ## **3** Create new field 
 ```bash
 $ NEW FIELD ON ADMIN and set data 
-. _______________________________________________________________________
+. _____________________________________________________________________________
 ├── adminhtml
-│     └── system.xml	
+│     └── system.xml				: Create new field on admin
 ├── Model
 │     └── Config
 |	     └── Source
-|		    └── source.php
-. ________________________________________________________________________
+|		    └── source.php		: Set data for field (Option)
+. _____________________________________________________________________________
 ```
 ![adminlayout](https://cdn.mageplaza.com/media/general/P8E2i4k.png) 
 
@@ -447,15 +447,79 @@ class [name] implements \Magento\Framework\Option\ArrayInterface
 }
 ```
 ## **4**. Create Config for Cron Job
+```php
+Data will be stored in table core_config_data
+```
 ```bash
 $ CRON JOB CONFIG
+
 . _______________________________________________________________________
 ├── etc
-│     ├── crontab.xml
-|     └── cron_groups.xml
+│     ├── crontab.xml		 	: Define Job and Group for Cron
+|     ├── cron_groups.xml	 	: Create new Cron group
+|     ├── config.xml		 	: Set default value
+|     └── adminhtml		
+|	     └── system.xml		: Show config admin
 ├── Cron
-│     └── FileName.php
+│     └── FileName.php		 	: Execute logic
+├── Model
+|     └── Config
+|	     └── Backend 
+|		    └── Cron.php 	: Store Database
 . ________________________________________________________________________
+```
+* **\app\code\[Vendor]\[Extention]\etc\crontab.xml**
+```xml 
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+	<group id="ghn">
+		<job instance="Netpower\Ghn\Cron\SyncOrder" method="execute" name="netpower_ghn_cron">
+			<config_path>crontab/[ID CRON GROUP]/jobs/[NAME OF JOB]/schedule/cron_expr</config_path>
+		</job>
+	</group>
+</config>
+```
+**\app\code\[Vendor]\[Extention]\etc\config.xml**
+```xml
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <crontab>
+            <ghn>
+                <jobs>
+                    <netpower_ghn_cron>
+                        <schedule>
+                            <cron_expr><![CDATA[0 1 * * *]]></cron_expr>
+                        </schedule>
+                    </netpower_ghn_cron>
+                </jobs>
+            </ghn>
+        </crontab>
+    </default>
+</config>
+```
+* **\app\code\[Vendor]\[Extention]\etc\system.xml**
+```xml
+		<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="carriers" translate="label" type="text" sortOrder="320" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="giaohangnhanh" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>GHN</label>
+             	 <field id="sync_district_cron" type="text"  translate="label comment tooltip" sortOrder="10" showInDefault="1">
+                    <label>Schedule Update Status GHN</label>  
+                    <validate>required-entry</validate>
+                    <attribute type="cron"><![CDATA[netpower_ghn_cron]]></attribute>
+                    <attribute type="group"><![CDATA[ghn]]></attribute>
+                    <backend_model>Netpower\Ghn\Model\Config\Backend\Cron</backend_model>
+                    <comment>
+                        <![CDATA[For instance 0 1 * * * !]]>
+                    </comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
 ```
 ### **4.1**. Create Cron Group 
 * **app/code/[Vendor]/[Extention]/etc/cron_groups.xml**
@@ -477,7 +541,108 @@ $ CRON JOB CONFIG
 ```bash
 $ composer require ethanyehuda/magento2-cronjobmanager
 ```
+### **4.3**. Create Backend Model for Cron Job 
+```php
+To save data into database in core_config_data table
+```
+```php
+<?php
 
+namespace Netpower\NERPIs\Model\Config\Backend;
+
+class Cron extends \Magento\Framework\App\Config\Value
+{
+    /**
+     * Cron string path
+     */
+    const CRON_STRING_PATH = 'crontab/%s/jobs/%s/schedule/cron_expr';
+
+    /**
+     * @var \Magento\Framework\App\Config\ValueFactory
+     */
+    protected $_configValueFactory;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param string $runModelPath
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Framework\App\Config\ValueFactory $configValueFactory,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        $runModelPath = '',
+        array $data = []
+    ) {
+        $this->_configValueFactory = $configValueFactory;
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
+    }
+
+    public function beforeSave()
+    {
+        $label = $this->getData('field_config/label');
+        $cronValue = $this->getValue();
+        $messageError = $this->validateCron($cronValue);
+        
+        if ($messageError) {
+            throw new \Magento\Framework\Exception\ValidatorException($messageError);
+        }
+
+        parent::beforeSave();
+    }
+
+    protected function validateCron($expr)
+    {
+        $error = "";
+        $e = preg_split('#\s+#', $expr, null, PREG_SPLIT_NO_EMPTY);
+
+        if (sizeof($e)<5 || sizeof($e)>6) {
+            $error = __('Invalid cron expression: '. $expr);
+        }
+
+        return $error;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function afterSave()
+    {
+        $cronName = $this->getData('field_config/cron');
+        $cronGroup = $this->getData('field_config/group');
+        $cronValue = $this->getValue();
+        $cronPath = sprintf(self::CRON_STRING_PATH, $cronGroup, $cronName);
+
+        try {
+            $this->_configValueFactory->create()->load(
+                $cronPath,
+                'path'
+            )->setValue(
+                $cronValue
+            )->setPath(
+                $cronPath
+            )->save();
+        } catch (\Exception $e) {
+            throw new \Exception(__('We can\'t save the cron expression.'));
+        }
+
+        return parent::afterSave();
+    }
+}
+```
 
  **********
 # IV.Front-end 
