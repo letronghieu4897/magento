@@ -590,7 +590,7 @@ class Cron extends \Magento\Framework\App\Config\Value
 
     public function beforeSave()
     {
-        $label = $this->getData('field_config/label');
+        $label = $this->getData('field_config/label'); 			//Get Text between <label> TEXT </label>
         $cronValue = $this->getValue();
         $messageError = $this->validateCron($cronValue);
         
@@ -621,7 +621,7 @@ class Cron extends \Magento\Framework\App\Config\Value
      */
     public function afterSave()
     {
-        $cronName = $this->getData('field_config/cron');
+        $cronName = $this->getData('field_config/cron');       //Get Text between <attribute type="N"> TEXT </attribute> with Type cron
         $cronGroup = $this->getData('field_config/group');
         $cronValue = $this->getValue();
         $cronPath = sprintf(self::CRON_STRING_PATH, $cronGroup, $cronName);
