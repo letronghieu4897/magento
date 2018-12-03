@@ -16,12 +16,11 @@
 - **3**. Indexer
 
 **III. Admin Site**
-
 - **1**. Create new menu
 - **2**. Create Grid on admin
 - **3**. Create new field 
-- - **3.1**. Front-end : Show field
-- - **3.2**. Back-end : source data for field
+	- **3.1**. Front-end : Show field
+	- **3.2**. Back-end : source data for field
 
 **IV. Front-end**
 - **1**. 
@@ -30,14 +29,16 @@
 - **1**. Install Database or Schema
 - **2**. Cron Job 
 - **3**. Collection
-- - **3.1**. Create Collection
-- - **3.2**. Using Factory
+	- **3.1**. Create Collection
+	- **3.2**. Using Factory
 - **4**. Get Data 
-- - **4.1**. From Admin Field
+	- **4.1**. From Admin Field
+ **********
 
 # I. Linux Server
 ## **1**. Change user 
 * **chown -R [username].[groupname] /[path]** : chown -R hieunetpower.hieunetpower /var/www/
+ **********
 # II.System 
 ## **1**. Set mode : 
 ```sh
@@ -75,6 +76,7 @@ $ php bin/magento indexer:status [indexer]
 $ php bin/magento indexer:reindex [indexer]
 
 ``` 
+ **********
 # III.Admin site 
 ## **1**. Create new Menu 
 * **app/code/[Vendor]/[Extention]/etc/adminhtml/menu.xml**
@@ -442,9 +444,10 @@ class [name] implements \Magento\Framework\Option\ArrayInterface
     }
 }
 ```
-
+ **********
 # IV.Front-end 
 ## 
+ **********
 # V.Back-end
 ## 1.Install Database or Schema
 ### **1.1** Create folder Setup 
