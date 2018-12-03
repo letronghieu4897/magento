@@ -21,7 +21,9 @@
 - **3**. Create new field 
 	- **3.1**. Front-end : Show field
 	- **3.2**. Back-end : source data for field
-
+- **4**. Create Config for Cron Job
+	- **4.1**. Create Cron Group
+	- **4.2**. Load Extention for managing CRON JOB
 ### IV. Front-end
 - **1**. 
 
@@ -340,7 +342,7 @@ $ NEW FIELD ON ADMIN and set data
 ![adminlayout](https://cdn.mageplaza.com/media/general/P8E2i4k.png) 
 
 ### **3.1**. Front-end : Show field 
-* **\app\code\[Vendor]\[Extention]\etc\adminhtml\system.xml
+* **\app\code\[Vendor]\[Extention]\etc\adminhtml\system.xml**
 ```xml
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
@@ -411,7 +413,7 @@ $ NEW FIELD ON ADMIN and set data
 ```xml
 Use it : <source_model>Netpower\Ghn\Model\Config\Source\[name]</source_model>
 ```
-* **\app\code\[Vendor]\[Extention]\Model\Config\Source\[name].php
+* **\app\code\[Vendor]\[Extention]\Model\Config\Source\[name].php**
 ```php
 <?php 
 
@@ -444,6 +446,39 @@ class [name] implements \Magento\Framework\Option\ArrayInterface
     }
 }
 ```
+## **4**. Create Config for Cron Job
+```bash
+$ CRON JOB CONFIG
+. _______________________________________________________________________
+├── etc
+│     ├── crontab.xml
+|     └── cron_groups.xml
+├── Cron
+│     └── FileName.php
+. ________________________________________________________________________
+```
+### **4.1**. Create Cron Group 
+* **app/code/[Vendor]/[Extention]/etc/cron_groups.xml**
+```xml
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/cron_groups.xsd">
+    <group id="ghn">
+        <schedule_generate_every>2</schedule_generate_every>
+        <schedule_ahead_for>8</schedule_ahead_for>
+        <schedule_lifetime>4</schedule_lifetime>
+        <history_cleanup_every>10</history_cleanup_every>
+        <history_success_lifetime>120</history_success_lifetime>
+        <history_failure_lifetime>1200</history_failure_lifetime>
+        <use_separate_process>2</use_separate_process>
+    </group>
+</config>
+```
+### **4.2**. Load Extention for managing CRON JOB
+```bash
+$ composer require ethanyehuda/magento2-cronjobmanager
+```
+
+
  **********
 # IV.Front-end 
 ## 
