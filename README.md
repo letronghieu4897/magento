@@ -19,6 +19,9 @@
 
 - **1**. Create new menu
 - **2**. Create Grid on admin
+- **3**. Create new field
+- - **3.1**. Front-end : Show field
+- - **3.2**. Back-end : source data for field
 
 **IV. Front-end**
 - **1**. 
@@ -318,7 +321,125 @@ class Order extends \Magento\Backend\Block\Widget\Grid\Container
 ### **2.5** Create Collection (Important) to Grid convert data 
 * **\app\code\[Vendor]\[Extention]\Model\GhnOrder.php [**V [3]**]**
 
+## **3** Create new field 
+```bash
+$ NEW FIELD ON ADMIN and set data 
+. _______________________________________________________________________
+├── adminhtml
+│     └── system.xml	
+├── Model
+│     └── Config
+|	     └── Source
+|		    └── source.php
+. ________________________________________________________________________
+```
+![adminlayout](https://cdn.mageplaza.com/media/general/P8E2i4k.png) 
 
+### **3.1**. Front-end : Show field 
+* **\app\code\[Vendor]\[Extention]\etc\adminhtml\system.xml
+```xml
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="carriers" translate="label" type="text" sortOrder="320" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="giaohangnhanh" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>GHN</label>
+                <field id="token_ghn" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Token</label>
+                </field>
+                <field id="active" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="name" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Method Name</label>
+                </field>
+                <field id="price" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Price</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
+                </field>
+                <field id="handling_type" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Calculate Handling Fee</label>
+                    <source_model>Magento\Shipping\Model\Source\HandlingType</source_model>
+                </field>
+                <field id="handling_fee" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Handling Fee</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
+                </field>
+                <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Sort Order</label>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Title</label>
+                </field>
+                <field id="sallowspecific" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Ship to Applicable Countries</label>
+                    <frontend_class>shipping-applicable-country</frontend_class>
+                    <source_model>Magento\Shipping\Model\Config\Source\Allspecificcountries</source_model>
+                </field>
+                <field id="specificcountry" translate="label" type="multiselect" sortOrder="91" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Ship to Specific Countries</label>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <field id="showmethod" translate="label" type="select" sortOrder="92" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Show Method if Not Applicable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="specificerrmsg" translate="label" type="textarea" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Displayed Error Message</label>
+                </field>
+                <field id="fromdistrictid" translate="label" type="select" sortOrder="101" showInDefault="1443" showInWebsite="1443" showInStore="1443">
+                    <label>Place of Warehouse</label>
+                    <source_model>Netpower\Ghn\Model\Config\Source\WareHouseGhn</source_model>
+                </field>
+                <field id="sync_district" translate="label comment tooltip" type="button" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Synchronize Province - District </label>
+                <frontend_model>Netpower\Ghn\Block\System\Config\Button</frontend_model>
+            </field>
+            </group>
+        </section>
+    </system>
+</config>
+```
+
+### **3.2**. Back-end : source data for field 
+```xml
+Use it : <source_model>Netpower\Ghn\Model\Config\Source\[name]</source_model>
+```
+* **\app\code\[Vendor]\[Extention]\Model\Config\Source\[name].php
+```php
+<?php 
+
+namespace Netpower\Ghn\Model\Config\Source;
+
+use Netpower\Ghn\Helper\GhnApi;
+use Netpower\Ghn\Services\Config;
+
+class [name] implements \Magento\Framework\Option\ArrayInterface
+{      
+
+    public function __construct() {
+    }
+    /**
+     * Options warehouse of Ghn
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {   
+     
+        $result = array();
+
+         $result[] = [
+                            'value' => 100,
+                            'label' => "One Hundred"
+                       ];
+        }
+        return $result;
+    }
+}
+```
 
 # IV.Front-end 
 ## 
