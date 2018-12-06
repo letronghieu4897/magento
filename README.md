@@ -25,7 +25,7 @@
 	- **4.1**. Create Cron Group
 	- **4.2**. Load Extention for managing CRON JOB
 ### IV. Front-end
-- **1**. 
+- **1**. **Override Order Confirmation Email**
 
 ### V. Back-end
 - **1**. Install Database or Schema
@@ -646,8 +646,59 @@ class Cron extends \Magento\Framework\App\Config\Value
 
  **********
 # IV.Front-end 
-## 
+## 1.Override Order Confirmation Email
+```txt
+Marketing > Email Template > Add New Template > Choose New Order > Load
+```
+```bash
+$ OVERRIDE ORDER CONFIRMATION EMAIL
+. ________________________________________________________________________________________
+├── design
+│     └── frontend
+|	     └── [Vendor]
+|		     └── [Extention]
+|			      └── Magento_Sales
+|					 └── templates
+|						 └── email
+|							└── items
+|							      └── order
+|								     └── default.phtml
+. _________________________________________________________________________________________
+```
+```txt 
+Go to registration.php 
+\vendor\magento\module-sales\registration.php
+```
+```php
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+\Magento\Framework\Component\ComponentRegistrar::register(
+    \Magento\Framework\Component\ComponentRegistrar::MODULE,
+    'Magento_Sales',
+    __DIR__
+);
+
+```
+```txt
+Create folder in 
+
+├── design
+│     └── frontend
+|	     └── [Vendor]
+|		     └── [Extention]
+
+With name is Magento_Sales : get from registration.php
+
+Then create path source same path into file default.phtml [Look at Tree]
+```
+
+
  **********
+ * 
 # V.Back-end
 ## 1.Install Database or Schema
 ### **1.1** Create folder Setup 
