@@ -54,6 +54,28 @@ server {
      include /var/www/scanholm/nginx.conf.sample;
 }
 ```
+* setup env.php
+```php
+<?php
+return [
+    'cache_types' => [
+        'compiled_config' => 1
+    ],
+    'db' => [
+        'table_prefix' => '',
+        'connection' => [
+            'default' => [
+                'host' => '192.168.181.40',
+                'dbname' => 'Magento_CE_2_2_Scanholm',
+                'username' => 'netpower',
+                'password' => 'webPower2010',
+                'active' => '1'
+            ]
+        ]
+    ],
+];
+
+```
  **********
 # II.System 
 ## **1**. Set mode : 
