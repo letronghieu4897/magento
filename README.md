@@ -9,6 +9,7 @@
 # TABLE CONTENTs
 ### I. Linux Server
  - **1**. Change user
+ - **2**. Multiple site 
  
 ### II. System
 - **1**. Set mode
@@ -40,6 +41,19 @@
 # I. Linux Server
 ## **1**. Change user 
 * **chown -R [username].[groupname] /[path]** : chown -R hieunetpower.hieunetpower /var/www/
+## **2**. Multiple site 
+* create file in : **/etc/nginx/sites-enabled/[name].conf**
+```conf
+server {
+     listen 80;
+     server_name  scanholm.local www.scanholm.local;
+
+     set $MAGE_ROOT /var/www/scanholm; [path of source]
+     set $MAGE_MODE developer;
+     set $MAGE_RUN_TYPE website;
+     include /var/www/scanholm/nginx.conf.sample;
+}
+```
  **********
 # II.System 
 ## **1**. Set mode : 
