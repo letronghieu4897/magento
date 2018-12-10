@@ -26,9 +26,9 @@
 	- **4.1**. Create Cron Group
 	- **4.2**. Load Extention for managing CRON JOB
 ### IV. Front-end
-- **1**. **Override Order Confirmation Email**
-- **2**. **Override block, theme.........**
-- **3**. **Create new tab**
+- **1**. Override Order Confirmation Email
+- **2**. Override block, theme.........
+- **3**. Create new tab
 
 ### V. Back-end
 - **1**. Install Database or Schema
