@@ -10,7 +10,7 @@
 ### I. Linux Server
  - **1**. Change user
  - **2**. Multiple site 
- 
+ - **3**. Command support
 ### II. System
 - **1**. Set mode
 - **2**. Clear cache
@@ -27,6 +27,8 @@
 	- **4.2**. Load Extention for managing CRON JOB
 ### IV. Front-end
 - **1**. **Override Order Confirmation Email**
+- **2**. **Override block, theme.........**
+- **3**. **Create new tab**
 
 ### V. Back-end
 - **1**. Install Database or Schema
@@ -62,6 +64,11 @@ Copy from env.php.local
  * **setup upgrade**
  * **enable cache**
  
+ ## **3**. Command support 
+ ```bash
+ 1. Find in folder
+$ grep -rn "Word_to_need_find" [Folder]/
+ ```
  **********
 # II.System 
 ## **1**. Set mode : 
@@ -717,7 +724,68 @@ With name is Magento_Sales : get from registration.php
 
 Then create path source same path into file default.phtml [Look at Tree]
 ```
+## 2.Override block, theme.........
+```php
+1. Go into file registration.php : -> get name of folder : [Netpower_Ghn]
+2. Go to design > frontend > [Vendor] > [Theme] > Create folder with name get from [1].
+3. Create file name the same with file is overrided [Same path]
+```
 
+```xml
+Block 
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="review_product_form_component"/>
+    <body>
+        <referenceBlock name="product.info.details">
+            <referenceBlock name="reviews.tab" remove="true"/>
+             <block class="Magento\Review\Block\Product\Review" name="trustpilot.review.tab" template="Trustpilot_Reviews::review.phtml" />
+        </referenceBlock>
+    </body>
+</page>
+
+
+1. referenceBlock : Only need the name. [Or referenceContainer]
+2. Only reference container contain the block we want to override. 
+```
+## 3.Create new tab 
+```xml
+<Example> Review Product </Example>
+. ___________________________________________
+├── [Vendor]_[Extention]
+│            ├── layout
+|	     │     └── catalog_product_view.xml
+|	     └── templates 
+|		   └── review.phtml
+. ____________________________________________
+
+<1> Create theme </1>
+<2> Create file same name in Core : catelog_product_view.xml</2>
+<3> Create new block </3>
+<4> Create template file : templates > review.phtml
+```
+```xml
+catalog_product_view.xml
+
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="product.info.details">
+            <referenceBlock name="reviews.tab" remove="true"/>
+            <block class="Magento\Catalog\Block\Product\View" name="trustpilot.review.tab" as="trustpilot.reviews" template="Trustpilot_Reviews::review.phtml" group="detailed_info">
+            	<arguments>
+            		<argument translate="true" name="title" xsi:type="string">Review</argument>
+            	</arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>
+```
+```phtml
+$block : this variable use as Class in block declare above. [Magento\Catalog\Block\Product\View] 
+
+We can you $block as View. 
+```
 
  **********
  * 
