@@ -11,6 +11,8 @@
  - **1**. Change user
  - **2**. Multiple site 
  - **3**. Command support
+ - **4**. Patch Security Upgrade Version 
+ 
 ### II. System
 - **1**. Set mode
 - **2**. Clear cache
@@ -68,6 +70,45 @@ Copy from env.php.local
  ```bash
  1. Find in folder
 $ grep -rn "Word_to_need_find" [Folder]/
+ ```
+ 
+ ## **4**. Patch Security Upgrade Version
+ ```txt
+ . _______________________________________________________________________
+├── app
+|    ├── etc
+│    │ 	  ├── local.xml ---------------	[Create new file]	
+│    │ 	  └── local.xml.staging -------	[Copy and Paste to local.xml]	
+|    └── Mage.php ---------------------	[Check version patch security]
+├── var
+|    └── cache ------------------------ [Clean cache]
+._________________________________________________________________________
+ 
+ 1. Download newest version patch security
+ 2. app > etc > local.xml.staging [Copy]
+ 3. [Paste] Create new file local.xml in etc.
+ 4. Check version of Patch Security : Go to file Mage.php 
+ 5. Copy file patch downloaded to root of source.
+ 6. Run sh [file].sh
+ 7. Delete folder cache : Clear cache
+ 8. Testing Code : Show diff 
+ 9. Testing Page : Order, Payment, Login, ...
+ ```
+ ```php
+ Mage.php 
+ 
+ PATCH IN HERE : 1901--
+ public static function getVersionInfo()
+    {
+        return array(
+            'major'     => '1',
+            'minor'     => '9',
+            'revision'  => '0',
+            'patch'     => '1',
+            'stability' => '',
+            'number'    => '',
+        );
+    }
  ```
  **********
 # II.System 
