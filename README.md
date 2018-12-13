@@ -40,6 +40,10 @@
 	- **3.2**. Using Factory
 - **4**. Get Data 
 	- **4.1**. From Admin Field
+	
+### VI. Windows
+- **1**. XAMPP
+
  **********
 
 # I. Linux Server
@@ -1248,4 +1252,22 @@ public function collectRates(RateRequest $request)
     $adminField = $this->_scopeConfig->getValue('[id of section]/[id of group]/[id of field]', ScopeInterface::SCOPE_STORE);
 }
 
+```
+
+# VI.Windows
+## 1.XAMPP
+```php
+Change in : xampp > apache > conf > extra > httpd-vhosts.conf
+```
+```conf
+<VirtualHost *:88>
+    ##ServerAdmin webmaster@dummy-host2.example.com
+    DocumentRoot "C:/xampp/htdocs/netpower/magento/Magento_CE_1_9_Salgvest"
+    ServerName salgvest.local
+    ##ErrorLog "logs/netpower/magento/Magento_CE_1_9_Salgvest-error.log"
+    ##CustomLog "logs/netpower/magento/Magento_CE_1_9_Salgvest-access.log" common
+</VirtualHost>
+```
+```php
+Change in : xampp > apache > conf > httpd.conf : chang port to 88
 ```
