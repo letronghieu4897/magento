@@ -44,6 +44,9 @@
 ### VI. Windows
 - **1**. XAMPP
 
+### VII. MAC
+- **1**. XAMPP
+
  **********
 
 # I. Linux Server
@@ -1271,3 +1274,10 @@ Change in : xampp > apache > conf > extra > httpd-vhosts.conf
 ```php
 Change in : xampp > apache > conf > httpd.conf : chang port to 88
 ```
+# VII.MAC
+## 1.XAMPP
+```php
+1. Change in : xampp > conf > extra > httpd-vhosts.conf
+2. Change in conf > httpd.conf : DirectoryRoot.
+```
+
