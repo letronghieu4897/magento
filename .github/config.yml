@@ -1,0 +1,5 @@
+# Configuration for repository
+repository:
+  description: "Comprehensive guide for Magento development covering server setup, system configuration, admin site customization, and more"
+  homepage: ""
+  topics: magento, e-commerce, php, web-development, guide
