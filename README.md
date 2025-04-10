@@ -6,6 +6,9 @@
 ![Front-end](https://img.shields.io/badge/Magento-Frontend-brightgreen.svg)
 ![Back-end](https://img.shields.io/badge/Magento-Backend-red.svg)
 
+# Magento Development Guide
+This repository serves as a comprehensive guide and knowledge base for Magento development. It covers server setup, system configuration, admin site customization, front-end and back-end development techniques, and various tools for Magento projects.
+
 # TABLE CONTENTs
 ******
 [**I.Linux CentOS**](https://github.com/letronghieu4897/magento/wiki/Linux---CentOS)
